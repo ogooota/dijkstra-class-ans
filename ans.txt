@@ -1,0 +1,114 @@
+1. O problema do caminho mais curto (shortest-path-problem) pode ser definido formalmente por
+P = (u, v) para u, v = vertice inicial, vertice final, respectivamente, onde P é o caminho 
+cuja soma dos pesos Ws é a menor possível. Baseado nisso, o single-source-shortest-path(SSSP)
+é o caminho mais curto possível de um vértice u até todos os outros vértices. O single-pair-shortest-path(SPSP) 
+toma conta de achar o caminho mais curto possível de um vértice u até outro vértice v, e o 
+all-pair-shortest-path(APSP) fica encarregado de encontrar todos os caminhos mais curtos entre todos os vértices
+de um grafo. Aplicações de cada algoritmo: 
+SSSP - Muito usado em GPS para calcular a rota mais rápida a partir das coordenadas do usuário;
+SPSP - Pode ser usado em jogos de mundo aberto com campanha linear para mostrar a rota mais rápida
+do jogador no local do final de uma missão até a próxima missão, que sempre vai ser a mesma;
+APSP - Usado geralmente para pré-processamento de rotas em GPS para otimização baseada em rotas comuns
+por localização, ou em redes sociais para saber a "distancia" entre duas pessoas quaisquer;
+
+2. O conceito de relaxamento de arestas se baseia nas variáveis de "custo" e "distância",
+onde a distância inicial de um vértice v até outro vértice u é infinito, e o custo seria
+a distância de v + o peso da aresta (v, u), se começamos com um grafo simples:
+
+al[3][3] = 
+{
+  [0] = {1, 2}, // 0 tem caminho com 1 e com 2
+  [1] = {2},    // 1 tem caminho com 2
+  [2] = {}      // 2 não tem caminhos
+}
+
+Temos que inicialmente a distância de 0 ate 0 é 0, e aos demais vértices é infinito. Para
+"relaxar" os vértices, fazemos a seguinte verificação:
+
+se distancia[v] + custo(v, u) < distancia[u]:
+  distancia[u] = distancia[v] + custo(v, u)
+
+Em condições iniciais, temos que distancia[v] + custo(v, u) vai ser sempre menor do que infinito,
+logo, atualizamos os valores baseados nos pesos iniciais:
+
+pi[] = 
+{
+  // [peso] = {v, u}
+  [20] = {0, 1},
+  [40] = {0, 2},
+  [10] = {1, 2}
+}
+
+Relaxando 0:
+  se distancia[0] + custo(0, 1) < distancia[1]:
+    distancia[1] = distancia[0] + custo(0, 1)
+  
+  ou seja:
+    0 + 20 < inf. ? verdadeiro.
+    logo:
+    distancia[1] = 20;
+
+  para (0, 2):
+    0 + 40 < inf. ? verdadeiro.
+    logo:
+    distancia[2] = 40;
+
+distancia = 
+{
+  [0] = 0,
+  [1] = 20,
+  [2] = 40
+}
+A tabela de distancias fica assim após o relaxamento do primeiro vértice.
+Continuando...
+
+Relaxando 1:
+  20 + 10 < 40 ? verdadeiro.
+  logo:
+  distancia[2] = 30
+
+distancia = 
+{
+  [0] = 0,
+  [1] = 20,
+  [2] = 30
+}
+A tabela de distancias fica assim após o relaxamento do segundo vértice.
+
+Aqui já temos o caminho mais rápido de 0 até qualquer um dos outros vértices, concluindo
+como caminho mais rápido para 1: 
+0 -> 1
+E para caminho mais rápido para 2:
+0 -> 1 -> 2,
+já que 0 -> 2 teria o custo de 40, enquanto 0 -> 1 -> 2 tem custo de 30.
+
+O conceito de relaxamento é importante para os algoritmos de Dijkstra e Bellman-Ford por conta
+do reconhecimento de que talvez a atual soma dos pesos não seja de fato o caminho mais rápido,
+e sim apenas um caminho que pode ser substituído caso encontre-se uma aresta que chegue no mesmo
+vértice com distância menor.
+
+3. A principal restrição do Dijkstra é justamente o peso negativo, ele não funciona pois
+a assumpção feita é de que os pesos do grafo representam apenas as distâncias entre um vértice
+e outro, e não outra variável que tenha peso maior para o algoritmo, seja ela para mais(caminho mais 
+rápido do que o atual) ou para menos(caminho menos rápido do que o atual), como economia/perda de tempo, etc.
+
+4. Estarei usando o mesmo grafo utilizado na questão 2 como exemplo:
+1 - escolher vértice inicial: 0;
+2 - "relaxar" 0:
+  0 + 20 < inf. ? verdadeiro.
+  dist[1] = 20
+  0 + 40 < inf. ? verdadeiro.
+  dist[2] = 40
+3 - escolher vértice na heap de menor distância: 1
+4 - "relaxar" 1:
+  20 + 10 < 40 ? verdadeiro.
+  dist[2] = 30
+.
+A estrutura de dados utilizada aqui seria a min heap, já que o array dist[n] sempre mantém o valor
+da menor distância no topo da árvore.
+
+A complexidade de tempo do algoritmo vai depender da quantidade de vértices e arestas, vezes 
+o log(V), formalmente: O((E + V) log V), já que no pior caso, deve-se percorrer a árvore de 
+distâncias na altura dela.
+
+5. 
