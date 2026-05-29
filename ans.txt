@@ -121,9 +121,12 @@ tempo maior para encontrar o caminho mais rápido, tendo que relaxar todos os v�
 3 - + 1 iteração extra para detectar os ciclos negativos
 O Bellman-Ford detecta ciclos negativos simplesmente verificando se após o relaxamento de todas as arestas
 ainda existir alguma aresta que pode ter uma distância melhor do que a atual, seja esse o caso,
-um ciclo negativo foi detectado, pois o menor caminho mais simples nunca precisa do que mais de n - 1 iterações.
+um ciclo negativo é detectado, pois o menor caminho mais simples nunca precisa do que mais de n - 1 iterações.
 
-9. 
+9. Pipeline do Floyd-Warshall:
+1 - inicializar uma matriz de distancias D[i][j] com o peso da aresta entre os vertices i e j caso ela exista,
+0 na diagonal para representar i == j, e INF. para qualquer par sem aresta direta
+2 - para cada par de vértices, 
 
 
 
