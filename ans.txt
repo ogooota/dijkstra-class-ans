@@ -111,4 +111,25 @@ A complexidade de tempo do algoritmo vai depender da quantidade de vértices e a
 o log(V), formalmente: O((E + V) log V), já que no pior caso, deve-se percorrer a árvore de 
 distâncias na altura dela.
 
-5. 
+6. A principal vantagem do Bellman-Ford em cima do Dijkstra é que ele aceita pesos negativos nas arestas e
+consegue encontrar ciclos negativos, porém, esta vantagem vem com o contraponto de ter uma complexidade de 
+tempo maior para encontrar o caminho mais rápido, tendo que relaxar todos os vértices pelo menos (n - 1) vezes.
+
+7. Segue a pipeline do Bellman-Ford:
+1 - inicializar todas as distâncias como infinito, exceto o vértice escolhido como origem, assim como no dijkstra
+2 - relaxar todas as arestas n - 1 vezes
+3 - + 1 iteração extra para detectar os ciclos negativos
+O Bellman-Ford detecta ciclos negativos simplesmente verificando se após o relaxamento de todas as arestas
+ainda existir alguma aresta que pode ter uma distância melhor do que a atual, seja esse o caso,
+um ciclo negativo foi detectado, pois o menor caminho mais simples nunca precisa do que mais de n - 1 iterações.
+
+9. 
+
+
+
+
+
+
+
+
+
